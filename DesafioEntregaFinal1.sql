@@ -1,4 +1,5 @@
-use ditribuidorabebidas;
+create schema MayoristaDrink;
+use mayoristadrink;
 
 create table empleados (
 DNI int primary key NOT NULL ,
@@ -16,40 +17,46 @@ closetime datetime,
 cierre_caja decimal,
 foreign key(DNI) references Empleados(DNI)
 );
-drop table ventas;
+
 create table ventas (
-id_ventas int not null,
+id_ventas int not null primary key,
 id_operador int,
-N_ticket varchar (30) primary key not null,
+N_ticket varchar (30) not null,
 importe decimal,
 foreign key(id_operador) references operador(id_operador)
 );
 
 create table ticket (
-cod_ticket int auto_increment not null primary key,
-N_ticket varchar(30),
+N_ticket varchar(30) primary key,
 hora_fecha datetime,
 nom_producto varchar (30),
 cantidad int,
 valor decimal,
 importe_total decimal,
 factura char,
-foreign key(n_ticket) references ventas(n_ticket)
+id_ventas int,
+foreign key(id_ventas) references ventas(id_ventas)
 );
-/*crear estas tablas*/
+
+create table proveedores (
+proveedor varchar(20) primary key,
+direccion varchar(20),
+telefono int,
+orden_compra varchar(40),
+foreign key(orden_compra) references ordenes(orden_compra));
+
 create table ordenes (
-id_pedido int auto_increment not null primary key,
+id_stock int,
 nom_producto varchar(30),
 cantidad int,
 valor_unitario decimal,
 N_factuta varchar(30),
 saldo decimal,
-orden_compra varchar(40),
+orden_compra varchar(40) primary key,
 foreign key(orden_compra) references pagos(orden_compra));
 
 create table pagos (
 orden_compra varchar(40) primary key,
-id_pagos int,
 n_factuta varchar (30),
 saldo decimal,
 aprovado char,
@@ -61,9 +68,10 @@ nom_proveedor varchar (30)
  linea varchar(20),
  nom_producto varchar (30),
  cantidad int,
- valor decimal
+ valor decimal,
+ id_ventas int,
+ foreign key(id_ventas) references ventas(id_ventas)
  );
-
 
 
 
